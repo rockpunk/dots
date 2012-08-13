@@ -1,0 +1,7 @@
+for x in ~/bin; do
+   if [ -d $x ] ; then
+   	PATH=$x:$PATH
+   fi
+done
+
+export BASH_PATHSET=1
