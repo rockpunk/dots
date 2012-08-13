@@ -28,9 +28,11 @@ export GPG_TTY=`tty`
 
 # empty stubs
 function solarize() {
+    :
 }
 
 function desolarize() {
+    :
 }
 
 agent_running=$(ps -u $USER | grep gpg-agent | grep -v grep)
