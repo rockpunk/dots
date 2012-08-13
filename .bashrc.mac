@@ -1,4 +1,6 @@
 # .bashrc
+[ -z "$BASH_PATHSET" ] && . ~/.bash_path
+
 
 # set up some generic CVS stuff
 #CVSROOT=cvs:/cvs
@@ -13,11 +15,6 @@ fi
 # set my editor
 export EDITOR=vim 
 
-# and me path
-PATH=$PATH:$HOME/bin:/opt/local/bin:/opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin:$HOME/android/sdk-r06/tools
-
-export math=/usr/local/Wolfram/Mathematica
-
 # give me a cool prompt
 PS1="\[[00;33m\]$((SHLVL-1)) \[[00;32m\]\h\[[00;39m\] | \[[00;34m\]\W\[[00;39m\] \$ "
 export PS1 
@@ -28,6 +25,13 @@ export PS1
 [ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
 
 export GPG_TTY=`tty`
+
+# empty stubs
+function solarize() {
+}
+
+function desolarize() {
+}
 
 agent_running=$(ps -u $USER | grep gpg-agent | grep -v grep)
 

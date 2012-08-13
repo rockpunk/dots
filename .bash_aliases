@@ -1,5 +1,5 @@
 # some more ls aliases
-alias ls='ls --color=auto'
+alias ls='ls -FG'
 alias l='ls -CF'
 alias ll='l -l'
 alias la='l -ACF'
@@ -40,6 +40,8 @@ alias gc='git commit -m'
 alias gd='git diff'
 alias ga='git add'
 alias gaa='git add .'
+alias gp='git push'
+alias gu='git pull'
 
 
 alias light='export SOLARIZED=light; solarize; echo -e "\033]50;SetProfile=SolarizedLight\a"'
