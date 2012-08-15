@@ -5,7 +5,6 @@
 "    ..ActivateAddons(["github:foo", .. => github://foo/vim-addon-foo
 "    ..ActivateAddons(["github:user/repo", .. => github://user/repo
 " Also see section "2.2. names of addons and addon sources" in VAM's documentation
-    "\'pyflakes%2441',
 
 let s:plugins = [
     \'ack',
@@ -139,7 +138,8 @@ endif
 let g:syntastic_check_on_open = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_auto_jump = 1
-"let g:syntastic_stl_format = ''
+
+" the syntax checker for java depends on classpath and was buggy
 let g:syntastic_mode_map = { 'mode':"active",
     \'active_filetypes' : [],
     \'passive_filetypes' : ['java'] }
@@ -167,16 +167,10 @@ set statusline+=%#identifier#
 set statusline+=%m
 set statusline+=%*
 
-set statusline+=%{fugitive#statusline()}
-
-"display a warning if &et is wrong, or we have mixed-indenting
-"set statusline+=%#error#
-"set statusline+=%{StatuslineTabWarning()}
-"set statusline+=%*
-
-"set statusline+=%{StatuslineTrailingSpaceWarning()}
-
-"set statusline+=%{StatuslineLongLineWarning()}
+"set statusline+=%{fugitive#statusline()}
+set statusline+=%#constant#
+set statusline+=%{VCSCommandGetStatusLine()}
+set statusline+=%*
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -211,10 +205,10 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-nnoremap <M-k> <C-u>
-nnoremap <M-j> <C-d>
-nnoremap <M-h> B
-nnoremap <M-l> E
+nnoremap <D-j> <C-F>
+nnoremap <D-k> <C-B>
+nnoremap <D-h> B
+nnoremap <D-l> E
 
 
 " use visual lines, not real lines
@@ -256,11 +250,8 @@ set pastetoggle=<C-v>
 " ------
 
 " quit no save
-nnoremap <leader>Q :q!<cr>
-nnoremap <leader>qq :q!<cr>
-nnoremap <leader>qa :qa!<cr>
-nnoremap <leader>wq :wq<cr>
-nnoremap <leader>w :w<cr>
+nnoremap <leader>qq :qa!<cr>
+nnoremap <leader>wq :waq<cr>
 
 " turn off search highlighting
 nnoremap <leader><space> :nohlsearch<cr>
@@ -280,10 +271,6 @@ nnoremap <leader>= yypVr=
 nnoremap <leader>~ yypVr~
 nnoremap <leader>_ yypVr_
 
-" switch quotes
-"nnoremap <leader>' cs"'
-"nnoremap <leader>" cs'"
-
 " edit vimrc
 nnoremap <leader>ev :tabe ~/.vimrc<cr>
 
@@ -295,11 +282,12 @@ nnoremap <leader>mg <Plug>MakeGreen
 let g:VCSCommandMapPrefix = '<leader>v'
 
 " snippets stuff
-let g:snips_author = 'stephen layland <cru@lindenlab.com>'
+let g:snips_author = 'stephen layland <steve@68k.org>'
 
 " tab completion
 "au FileType python set omnifunc=pythoncomplete#Complete fo=tcrno
-au FileType help nnoremap <enter> :exec("tag ".expand("<cword>"))<cr>
+au FileType help nnoremap <buffer> <enter> :exec("tag ".expand("<cword>"))<cr>
+au FileType help nnoremap <buffer> q :q<cr>
 au FileType *.{x,ht}ml,ruby,eruby,yaml set ts=2 sw=2
 
 let g:SuperTabDefaultCompletionType = "context"
@@ -311,6 +299,7 @@ filetype plugin indent on
 au! BufRead,BufNewFile *.proto setfiletype proto
 au! BufRead,BufNewFile *.pig setfiletype pig
 "au! BufRead,BufNewFile *.{x,ht}ml,ruby,eruby,yaml set ts=2 sw=2
+autocmd BufRead *.java set efm=%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%# makeprg=ant\ -find\ build.xml
 
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
