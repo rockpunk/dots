@@ -19,9 +19,6 @@ export EDITOR=vim
 PS1="\[[00;33m\]$((SHLVL-1)) \[[00;32m\]\h\[[00;39m\] | \[[00;34m\]\W\[[00;39m\] \$ "
 export PS1 
 
-## DJANGO
-#export LL_DJANGO_MODE=local
-
 [ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
 
 export GPG_TTY=`tty`
