@@ -62,8 +62,8 @@ endf
 
 fun! SetupVAM()
     " Set advanced options like this:
-    " let g:vim_addon_manager = {}
-    " let g:vim_addon_manager['key'] = value
+    let g:vim_addon_manager = {}
+    let g:vim_addon_manager['auto_install'] = 1
 
     " Example: drop git sources unless git is in PATH. Same plugins can
     " be installed from www.vim.org. Lookup MergeSources to get more control
