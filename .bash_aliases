@@ -46,3 +46,5 @@ alias gu='git pull'
 
 alias light='export SOLARIZED=light; solarize; echo -e "\033]50;SetProfile=SolarizedLight\a"'
 alias dark='export SOLARIZED=dark; solarize; echo -e "\033]50;SetProfile=SolarizedDark\a"'
+
+alias tt='tmux attach || tmux new'
