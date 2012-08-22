@@ -1,0 +1,35 @@
+Host 68k*
+	User steve
+	HostName 68k.org
+
+Host crutest
+    IdentityFile ~/.ssh/crutest_rsa
+    User root
+
+Host cdh4
+    IdentityFile ~/.ssh/cdh4.key
+    HostName ec2-50-16-139-242.compute-1.amazonaws.com
+    User steve
+
+Host rockpunk
+    User steve
+    Host rockpunk.org
+
+Host kuru
+	User kurufoot
+	HostName kurufootwear.com
+
+Host layland*
+    User layland
+    HostName laylandmaclap
+
+Host github.com
+    User git
+    ForwardAgent no
+
+Host *
+	ForwardX11 no
+	ForwardAgent yes
+    ProxyCommand none
+
+
