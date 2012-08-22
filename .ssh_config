@@ -13,14 +13,6 @@ Host rockpunk
     User steve
     Host rockpunk.org
 
-Host kuru
-    User kurufoot
-    HostName kurufootwear.com
-
-Host layland*
-    User layland
-    HostName laylandmaclap
-
 Host github.com
     User git
     ForwardAgent no
