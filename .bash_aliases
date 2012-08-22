@@ -48,4 +48,3 @@ alias light='export SOLARIZED=light; solarize; echo -e "\033]50;SetProfile=Solar
 alias dark='export SOLARIZED=dark; solarize; echo -e "\033]50;SetProfile=SolarizedDark\a"'
 
 alias tt='tmux attach || tmux new'
-alias ack='ack-grep'

@@ -156,3 +156,7 @@ export LANG=en_US.utf8
 # psql pager
 #export PAGER=less
 #export LESS="-iMSx4 -FX"
+
+if [ ! -z "$(type -p ack-grep)" ]; then
+    alias ack='ack-grep'
+fi
