@@ -3,7 +3,7 @@ pwd := $(shell cd $(dir); pwd)
 platform := $(shell uname)
 specialfiles:= .bashrc .bash_path
 dirs:= bin
-normalfiles:= $(shell git ls-files | grep -v 'Makefile\|README\|bashrc\|bash_path\|ssh_config\|/')
+normalfiles:= $(shell git ls-files | grep -v 'Makefile\|README\|bashrc\|bash_path\|ssh_config\|dircolors\|/')
 
 install:
 	@for x in $(normalfiles); do\
@@ -23,5 +23,9 @@ else
 	@for x in $(specialfiles); do\
 		ln -sf "$(pwd)/$$x" ~;\
 	done
+	@for x in dark light; do\
+		ln -sf $(pwd)/dircolors-solarized/dircolors.ansi-$$x ~/.dir_colors.ansi-$$x;\
+	done
+	@ln -sf ~/.dir_colors.ansi-dark ~/.dir_colors
 endif
 	@echo ". ~/.bashrc"

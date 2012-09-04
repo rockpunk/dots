@@ -2,7 +2,15 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-[ -z "$BASH_PATHSET" ] && . ~/.bash_path
+if [ -f ~/.bash_path ]; then
+    . .bash_path
+    for d in $path; do 
+        if [ -d $d -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
+            PATH=$PATH:$d
+        fi
+    done
+    export PATH
+fi
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -56,7 +64,7 @@ export DEFAULT_SOLARIZED='light'
 function solarize() { 
     [ -z "$SOLARIZED" ] && export SOLARIZED=$DEFAULT_SOLARIZED
     if diff $HOME/.dir_colors{,.ansi-$SOLARIZED} >/dev/null 2>&1; then
-        ln -sf $HOME/.dircolors.ansi-$SOLARIZED $HOME/.dir_colors
+        ln -sf $HOME/.dir_colors.ansi-$SOLARIZED $HOME/.dir_colors
     fi
     eval `dircolors $HOME/.dir_colors`; export LS_COLORS; 
     PS1='${debian_chroot:+($debian_chroot)}\[\033[00;32m\]\u@\h\[\033[00;39m\]:\[\033[00;34m\]\w\[\033[00;39m\]\$ '

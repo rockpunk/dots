@@ -1,8 +1,5 @@
-for x in ~/bin /opt/local/bin \
+path=~/bin \
+    /opt/local/bin \
     /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin \
     ~/android/sdk-r06/tools \
-    $HOME/.rbenv/bin; do
-  if [ -d $x -a -z "$(echo $PATH | grep "$x" 2>/dev/null)" ] ; then
-   	PATH=$x:$PATH
-  fi
-done
+    $HOME/.rbenv/bin

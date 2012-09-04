@@ -36,10 +36,9 @@ alias hqpp='hg qpush'
 
 # git
 alias g='git status'
-alias gc='git commit -am'
+alias gc='git commit -a'
 alias gd='git diff'
-alias ga='git add'
-alias gaa='git add .'
+alias ga='git add .'
 alias gp='git push'
 alias gu='git pull'
 
