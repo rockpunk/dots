@@ -1,5 +1,5 @@
 # .bashrc
-[ -z "$BASH_PATHSET" ] && . ~/.bash_path
+. ~/.bash_path
 
 
 # set up some generic CVS stuff
