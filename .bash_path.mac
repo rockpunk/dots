@@ -1,5 +1,6 @@
-path=~/bin \
+path="~/bin \
     /opt/local/bin \
     /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin \
     ~/android/sdk-r06/tools \
-    $HOME/.rbenv/bin
+    $HOME/.rbenv/bin \
+    /opt/local/lib/mysql55/bin"

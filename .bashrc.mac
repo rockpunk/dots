@@ -1,6 +1,6 @@
 # .bashrc
-if [ -f ~/.bash_path.mac ]; then
-    . .bash_path.mac
+if [ -e ~/.bash_path ]; then
+    . .bash_path
     for d in $path; do 
         if [ -d $d -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
             PATH=$PATH:$d
