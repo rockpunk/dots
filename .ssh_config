@@ -12,14 +12,28 @@ Host *treasure-data.com
     user root
     IdentityFile ~/.ssh/gree.pem
 
+Host document.metricinsights.com
+    User root
+    IdentityFile ~/.ssh/ec2.key
+
 Host ec2*amazonaws.com
     User root
     IdentityFile ~/.ssh/ec2.key
 
-Host cdhx
+Host cdhx chdx.metricinsights.com
     User root
     IdentityFile ~/.ssh/ec2.key
-    HostName ec2-107-21-163-24.compute-1.amazonaws.com
+    HostName cdhx.metricinsights.com
+    LocalForward 50030 localhost:50030
+    LocalForward 50060 localhost:50060
+
+Host homeaway
+    HostName ascmidb002
+    User mmoscovici
+
+Host homeaway-prod
+    HostName ascmidb004
+    User mmoscovici
 
 Host rockpunk
     User steve
@@ -33,8 +47,56 @@ Host github.com
     User git
     ForwardAgent no
 
+Host adam adam.metricinsights.com
+    HostName adam.metricinsights.com
+    LocalForward 1081 localhost:1080
+
 Host *
     ForwardX11 no
     ForwardAgent yes
     ProxyCommand none
 
+Host 1010data
+    HostName 1010data.metricinsights.com
+    User root
+    IdentityFile ~/.ssh/ec2.key
+Host v2solutions
+    HostName v2solutions.metricinsights.com
+    User root
+    IdentityFile ~/.ssh/ec2.key
+
+Host *spider.io
+    Hostname mi.spider.io
+    User root
+    IdentityFile ~/.ssh/ec2.key
+
+Host bob bob.metricinsights.com tunnel
+    HostName bob.metricinsights.com
+    User cru
+    LocalForward 1080 localhost:1080
+    #ServerAliveInterval 5
+    #ServerAliveCountMax 3
+
+Host b??insight0? b??insightana0?
+    User root
+    LocalForward 443 localhost:443
+    LocalForward 80 localhost:80
+
+Host proxmox.metricinisghts.com
+    User root
+
+#Host *.metricinsights.com
+#    User root
+#    IdentityFile ~/.ssh/ec2.key
+
+Host backdoor backdoor.lindenlab.com 
+    HostName backdoor.lindenlab.com
+    User slaylandmetricinsights
+
+Host *.lindenlab.com
+    User slaylandmetricinsights
+
+
+Host adobeprd
+    HostName sj1slm1002.corp.adobe.com
+    User met11366

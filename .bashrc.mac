@@ -3,7 +3,7 @@ if [ -e ~/.bash_path ]; then
     . ~/.bash_path
     for d in $path; do 
         if [ -d $d -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
-            PATH=$PATH:$d
+            PATH=$d:$PATH
         fi
     done
     export PATH
@@ -23,12 +23,17 @@ fi
 export EDITOR=vim
 
 # give me a cool prompt
-PS1="\[[00;33m\]$((SHLVL-1)) \[[00;32m\]\h\[[00;39m\] | \[[00;34m\]\W\[[00;39m\] \$ "
+PS1="\[[00;32m\]\u\[[00;39m\]@\[[00;32m\]\h\[[00;39m\]:\[[00;34m\]\W\[[00;39m\] \$ "
 export PS1 
 
 [ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
 
 export GPG_TTY=`tty`
+
+function ip() { 
+  iface=${1:-en1}
+  /sbin/ifconfig $iface | sed -E '/inet /s/^.*inet ([\.0-9]+).*/\1/p;d'
+}
 
 # empty stubs
 function solarize() {
@@ -54,6 +59,8 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+eval "$(rbenv init -)"

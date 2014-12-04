@@ -34,6 +34,9 @@ alias hqa='hg qapplied'
 alias hqs='hg qseries'
 alias hqpp='hg qpush'
 
+alias dev='hg up -r dev'
+alias prd='hg up -r default'
+
 # git
 alias g='git status'
 alias gc='git commit -a'
@@ -47,3 +50,6 @@ alias light='export SOLARIZED=light; solarize; echo -e "\033]50;SetProfile=Solar
 alias dark='export SOLARIZED=dark; solarize; echo -e "\033]50;SetProfile=SolarizedDark\a"'
 
 alias tt='tmux attach || tmux new'
+
+alias mysqlstart='sudo /opt/local/lib/mysql51/bin/mysqld_safe &'
+alias mysqlstop='/opt/local/lib/mysql51/bin/mysqladmin -u root -p shutdown'

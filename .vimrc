@@ -28,8 +28,9 @@ let s:plugins = [
     \'taglist-plus',
     \'Syntastic',
     \'rails',
-    \'vim-ruby'
+    \'vim-ruby',
     \]
+"    \'github:Valloric/YouCompleteMe',
 let s:plugin_autoinstall = 1
 
 " load vam
@@ -126,7 +127,7 @@ set scrolloff=3
 set visualbell
 set cursorline " highlight the cursor line
 set t_Co=256 " use 256 colors
-colorscheme elflord " set this to your default non-solarized colorscheme
+colorscheme solarized " set this to your default non-solarized colorscheme
 set background=dark " your default background
 let g:solarized_hitrail=1
 
@@ -142,7 +143,7 @@ let g:syntastic_auto_jump = 1
 " the syntax checker for java depends on classpath and was buggy
 let g:syntastic_mode_map = { 'mode':"active",
     \'active_filetypes' : [],
-    \'passive_filetypes' : ['java'] }
+    \'passive_filetypes' : ['java','ruby'] }
 
 
 " highlight SpellBad groups brightly
@@ -298,6 +299,8 @@ filetype plugin indent on
 
 au! BufRead,BufNewFile *.proto setfiletype proto
 au! BufRead,BufNewFile *.pig setfiletype pig
+au! BufRead,BufNewFile *.*{x,ht}ml set ts=2 sw=2
+
 "au! BufRead,BufNewFile *.{x,ht}ml,ruby,eruby,yaml set ts=2 sw=2
 autocmd BufRead *.java set efm=%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%# makeprg=ant\ -find\ build.xml
 
