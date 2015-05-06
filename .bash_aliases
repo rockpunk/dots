@@ -35,6 +35,9 @@ alias hqa='hg qapplied'
 alias hqs='hg qseries'
 alias hqpp='hg qpush'
 
+alias dev='hg up -r dev'
+alias prd='hg up -r default'
+
 # git
 alias g='git status'
 alias gf='git fetch'
@@ -75,4 +78,5 @@ function greename() {
 greessh() {
     ssh $(greename $1 | tail -n1)
 }
+
 
