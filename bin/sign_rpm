@@ -1,0 +1,7 @@
+#!/usr/bin/expect -f
+# workaround broken rpm by sending a passphrase
+
+spawn rpm --define=_gpg_name\ $env(GPG_KEY) --resign {*}$argv
+expect -exact "Enter pass phrase: "
+send -- "\n"
+expect eof

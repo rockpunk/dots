@@ -1,0 +1,140 @@
+#!/usr/bin/python
+# vim: ts=2 sw=2
+
+import argparse
+import json
+import logging
+import os
+import re
+import shlex
+import subprocess
+import sys
+
+logging.basicConfig()
+logger=logging.getLogger('tdtemplate')
+
+TEMPLATE_RE = r'(mi-(?:(?i)(?:gree|gungho|game-(?:us|ja))-)?template)-v([\d.]+)(-debian)?'
+INSTANCE_TYPE = 'm3.medium'
+KEY_NAME = 'metricinsights'
+SECURITY_GROUP = 'metricinsights'
+
+class App(object):
+  __amis__ = {}
+  __instances__ = None
+
+  def run(self):
+    p = argparse.ArgumentParser(description='manage td template AMIs.',add_help=False)
+    p.add_argument('-n','--dry-run', action='store_true')
+    p.add_argument('-v','--verbose',action='store_true')
+    sub_p = p.add_subparsers(metavar='COMMAND', help='command to run')
+    sub_p.add_parser('list', help='list latest template AMIs').set_defaults(func='do_list')
+    sub_p.add_parser('launch', help='launch latest template AMIs').set_defaults(func='do_launch')
+    sub_p.add_parser('dsh', help='print a dsh file').set_defaults(func='do_dsh')
+    sub_p.add_parser('release', help='release ew amis from templates').set_defaults(func='do_release')
+    self.opts= p.parse_args()
+    if self.opts.verbose:
+      logger.setLevel(logging.DEBUG)
+    else:
+      logger.setLevel(logging.INFO)
+    f = getattr(self, self.opts.func)
+    if f:
+      return f()
+
+  def call_aws(self,cmd,run_anyway=False):
+    if not cmd.startswith('/usr'):
+      cmd = '/usr/local/bin/' + cmd
+    logger.debug('Calling: %s' % cmd)
+    cmd = shlex.split(cmd + " --profile td --output json")
+    if not self.opts.dry_run or run_anyway:
+      p = subprocess.Popen(cmd, stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+      (o,e) = p.communicate()
+      if p.returncode != 0:
+        if e.find('The config profile (td) could not be found') >= 0:
+          raise RuntimeError("Please set up the 'td' profile in your ~/.aws/credentials file.")
+        raise RuntimeError("Error running aws cli: %s" % e)
+      ret = json.loads(o)
+      return ret
+    else:
+      return {}
+
+  @property
+  def raw_amis(self):
+    if not self.__amis__:
+      ret = self.call_aws("aws ec2 describe-images --owner self --query 'Images[*].{n:Name,id:ImageId}'", run_anyway=True)
+      ret=sorted(ret, key=lambda x: x.get('n').lower())
+      tmps = {}
+      for i in ret:
+        m = re.search(TEMPLATE_RE, i.get('n'))
+        if m:
+          self.__amis__[m.group(1).lower()] = i
+    return self.__amis__
+
+  @property
+  def amis(self):
+    return self.raw_amis.keys()
+
+  @property
+  def raw_instances(self):
+    if self.__instances__ == None:
+      self.__instances__ = {}
+      instances = self.call_aws("aws ec2 describe-instances --query 'Reservations[*].Instances[*].{i:InstanceId,ami:ImageId,t:Tags,dns:PublicDnsName}' --filters Name=instance-state-name,Values=running", run_anyway=True)
+      for i in instances:
+        for t in i[0].get('t'):
+          if t['Key'] == 'Name':
+            m = re.search(TEMPLATE_RE, t['Value'])
+            if m:
+              self.__instances__[m.group(1).lower()] = i[0]
+              self.__instances__[m.group(1).lower()]['Name'] = t['Value']
+    return self.__instances__
+
+  @property
+  def instances(self):
+    return self.raw_instances.keys()
+
+  def do_list(self):
+    for k in self.amis:
+      print "-- %s" % self.raw_amis.get(k).get('n')
+
+  def do_launch(self):
+    imgs_to_launch=[]
+    for x in self.amis:
+      if x in self.instances:
+        print "WARNING: Instance for %s already running." % x
+        continue
+      imgs_to_launch.append(x)
+    logger.info("Got these images to launch: %s", `imgs_to_launch`)
+    for img in imgs_to_launch:
+      logger.info('Launching %s image %s', img, self.raw_amis.get(img).get('id'))
+      ret = self.call_aws("aws ec2 run-instances --image-id %s --instance-type %s --key-name %s --security-groups %s" % (
+        self.raw_amis.get(img).get('id'),
+        INSTANCE_TYPE,
+        KEY_NAME,
+        SECURITY_GROUP
+        ))
+      logger.debug('AWS RETURNED: %s', `ret`)
+      for i in ret.get('Instances',{}):
+        logger.info('Tagging new instance %s with name=%s', i.get('InstanceID'),img)
+        ret = self.call_aws("aws ec2 create-tags --resources %s --tags Key=Name,Value=%s" % (i.get('InstanceID'), self.raw_amis.get(img).get('n')) )
+
+  def do_dsh(self):
+    f = open(os.path.expanduser('~/.dsh/group/gree_tmpl'),'w')
+    print "Writing the following to ~/.dsh/group/gree_tmpl:"
+    for l in [ "# %s\n%s" % (i, self.raw_instances.get(i).get('dns')) for i in self.raw_instances ]:
+      f.write(l+"\n")
+      print l
+    f.close()
+
+  def do_release(self):
+    if not os.path.exists(os.path.expanduser('~/.dsh/group/gree_tmpl')):
+      do_dsh()
+    cmd = 'dsh -Mcg gree_tmpl -- /usr/local/lib/mi/ec2/tdtemplate-release.sh'
+    logger.info('Running %s', cmd)
+    if not self.opts.dry_run:
+      os.system(cmd)
+
+def main():
+  a = App()
+  a.run()
+
+if __name__ == '__main__':
+  sys.exit(main())

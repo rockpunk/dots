@@ -28,7 +28,8 @@ let s:plugins = [
     \'taglist-plus',
     \'Syntastic',
     \'rails',
-    \'vim-ruby'
+    \'vim-ruby',
+    \'github:derekwyatt/vim-scala',
     \]
 let s:plugin_autoinstall = 1
 
@@ -129,7 +130,6 @@ set t_Co=256 " use 256 colors
 colorscheme elflord " set this to your default non-solarized colorscheme
 set background=dark " your default background
 let g:solarized_hitrail=1
-
 if $SOLARIZED == 'light' || $SOLARIZED == 'dark'
     colorscheme solarized
     let &background=$SOLARIZED
@@ -142,7 +142,7 @@ let g:syntastic_auto_jump = 1
 " the syntax checker for java depends on classpath and was buggy
 let g:syntastic_mode_map = { 'mode':"active",
     \'active_filetypes' : [],
-    \'passive_filetypes' : ['java'] }
+    \'passive_filetypes' : ['java','ruby','erb'] }
 
 
 " highlight SpellBad groups brightly

@@ -4,6 +4,7 @@ alias l='ls -CF'
 alias ll='l -l'
 alias la='l -ACF'
 alias c='clear'
+alias less='less -R'
 
 # screen
 alias ss='_call_screen'
@@ -36,14 +37,42 @@ alias hqpp='hg qpush'
 
 # git
 alias g='git status'
+alias gf='git fetch'
 alias gc='git commit -a'
 alias gd='git diff'
 alias ga='git add .'
 alias gp='git push'
 alias gu='git pull'
+alias go='git checkout'
+alias gt='git tip'
+alias gb='git branch'
+alias gba='git branch -a'
+alias bfg='java -jar ~/lib/java/bfg.jar'
 
 
 alias light='export SOLARIZED=light; solarize; echo -e "\033]50;SetProfile=SolarizedLight\a"'
 alias dark='export SOLARIZED=dark; solarize; echo -e "\033]50;SetProfile=SolarizedDark\a"'
 
-alias tt='tmux attach || tmux new'
+alias tt='tmux attach || tmux -f ~/.tmux.bob.conf new'
+alias wl='wemux l'
+alias wk='wemux k'
+function ww() { 
+    if [ -z $1 ]; then
+        wemux
+    else
+        wemux j $1 > /dev/null && wemux
+    fi
+}
+
+function greename() {
+    if echo $1 | grep '[0-9]\+' >/dev/null; then
+        grep $1 /etc/dsh/group/gree -B1
+    else
+        grep $1 /etc/dsh/group/gree -A1 | sed '/^$/d'
+    fi
+}
+
+greessh() {
+    ssh $(greename $1 | tail -n1)
+}
+

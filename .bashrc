@@ -3,14 +3,15 @@
 # for examples
 
 if [ -f ~/.bash_path ]; then
-    . .bash_path
+    . ~/.bash_path
     for d in $path; do 
-        if [ -d $d -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
+        if [ -d "$d" -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
             PATH=$PATH:$d
         fi
     done
     export PATH
 fi
+
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -18,6 +19,9 @@ fi
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
 export EDITOR=vim
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM="auto git"
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -34,10 +38,10 @@ fi
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
 xterm|xterm-color|screen|xterm-256color)
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] $(__git_ps1 " (%s)")\$ '
     ;;
 *)
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w $(__git_ps1 " (%s)")\$ '
     ;;
 esac
 
@@ -67,13 +71,13 @@ function solarize() {
         ln -sf $HOME/.dir_colors.ansi-$SOLARIZED $HOME/.dir_colors
     fi
     eval `dircolors $HOME/.dir_colors`; export LS_COLORS; 
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[00;32m\]\u@\h\[\033[00;39m\]:\[\033[00;34m\]\w\[\033[00;39m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[00;32m\]\u@\h\[\033[00;39m\]:\[\033[00;34m\]\w\[\033[00;39m\] $(__git_ps1 "(%s)")\$ '
 }
 
 function desolarize() {
     eval `dircolors -b`; export LS_COLORS; 
     unset SOLARIZED;
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] $(__git_ps1 "(%s)")\$ '
 }
 
 # enable color support of ls and also add handy aliases
@@ -168,3 +172,9 @@ export LANG=en_US.utf8
 if [ ! -z "$(type -p ack-grep)" ]; then
     alias ack='ack-grep'
 fi
+
+eval "$(rbenv init -)"
+export PERL5LIB=/home/cru/lib/perl/lib/perl/5.10/auto:/home/cru/lib/perl/lib/perl/5.10.1/auto:/home/cru/lib/perl/share/perl/5.10.1:/home/cru/lib/perl/share/perl/5.10:$PERL5LIB
+
+export EC2_HOME=/usr/local/bin/ec2-api-tools
+export JAVA_HOME=/usr

@@ -12,6 +12,10 @@ Host *treasure-data.com
     user root
     IdentityFile ~/.ssh/gree.pem
 
+Host document.metricinsights.com
+    User root
+    IdentityFile ~/.ssh/ec2.key
+
 Host ec2*amazonaws.com
     User root
     IdentityFile ~/.ssh/ec2.key
@@ -19,7 +23,15 @@ Host ec2*amazonaws.com
 Host cdhx
     User root
     IdentityFile ~/.ssh/ec2.key
-    HostName ec2-107-21-163-24.compute-1.amazonaws.com
+    HostName cdhx.metricinsights.com
+
+Host homeaway
+    HostName ascmidb002
+    User mmoscovici
+
+Host homeaway-prod
+    HostName ascmidb004
+    User mmoscovici
 
 Host rockpunk
     User steve
@@ -32,9 +44,34 @@ Host kuru
 Host github.com
     User git
     ForwardAgent no
+    IdentityFile ~/.ssh/mi_deploy
 
 Host *
     ForwardX11 no
     ForwardAgent yes
     ProxyCommand none
+
+Host eve.metricinsights.com
+    User cru 
+    IdentityFile ~/.ssh/ec2.key
+    
+Host *.metricinsights.com
+    User root
+    IdentityFile ~/.ssh/ec2.key
+    StrictHostKeyChecking no
+
+Host *amazonaws.com
+    StrictHostKeyChecking no
+
+Host *treasure-data.com
+    StrictHostKeyChecking no
+
+Host v2solutions
+    HostName v2solutions.metricinsights.com
+    User root
+    IdentityFile ~/.ssh/ec2.key
+Host *spider.io
+    Hostname mi.spider.io
+    User root
+    IdentityFile ~/.ssh/ec2.key
 

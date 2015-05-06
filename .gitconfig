@@ -1,3 +1,19 @@
 [user]
-	name = steve layland
-	email = steve@68k.org
+	name = cru
+	email = cru@metricinsights.com
+[merge]
+	tool = vimdiff
+	conflictstyle = merge
+[alias]
+	co = checkout
+	tip = log -1 HEAD
+	path = remote -v
+	down = pull --rebase
+	onup = push
+[color]
+	ui = true
+[mergetool "diffconflicts"]
+	cmd = diffconflicts vim $BASE $LOCAL $REMOTE $MERGED
+	trustexitcode = false
+[mergetool]
+	keepBackup = false
