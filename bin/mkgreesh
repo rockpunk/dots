@@ -31,10 +31,10 @@ class TDSheet(object):
   def maxrow(self):
     if not self.__maxrow:
       try:
-        n = [ i for i,c in enumerate(self.sheet.col_values(2)) if 'Finished to use MI' == c ][0]
+        n = [ i for i,c in enumerate(self.sheet.col_values(4)) if 'Finished to use MI' == c ][0]
         self.__maxrow = n
       except Exception, e:
-        raise Error("Could not determine end of spreadsheet. Fix code to match spreadsheet!")
+        raise RuntimeError("Could not determine end of spreadsheet. Fix code to match spreadsheet!")
     return self.__maxrow
 
   def _getcol(self, n):
@@ -44,19 +44,19 @@ class TDSheet(object):
   @property
   def products(self):
     if not self.__products:
-      self.__products = self._getcol(3)
+      self.__products = self._getcol(5)
     return self.__products
 
   @property
   def dbs(self):
     if not self.__dbs:
-      self.__dbs = self._getcol(5)
+      self.__dbs = self._getcol(7)
     return self.__dbs
 
   @property
   def hosts(self):
     if not self.__hosts:
-      self.__rawhosts = [ [i,re.sub(r'^https?://([^/]+)/?$',r'\1',c)] for i,c in enumerate(self.sheet.col_values(7)) if i<=self.maxrow and c and re.search(r'https://.*',c) ]
+      self.__rawhosts = [ [i,re.sub(r'^https?://([^/]+)/?$',r'\1',c)] for i,c in enumerate(self.sheet.col_values(9)) if i<=self.maxrow and c and re.search(r'https://.*',c) ]
       self.__hosts = [ h for i,h in self.__rawhosts ]
     return self.__hosts
 
