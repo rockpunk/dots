@@ -30,6 +30,10 @@ let s:plugins = [
     \'rails',
     \'vim-ruby',
     \'github:derekwyatt/vim-scala',
+    \'github:godlygeek/tabular',
+    \'github:plasticboy/vim-markdown',
+    \'github:guns/vim-clojure-static',
+    \'github:guns/vim-clojure-highlight'
     \]
 "    \'github:Valloric/YouCompleteMe',
 let s:plugin_autoinstall = 1
