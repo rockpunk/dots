@@ -1,0 +1,66 @@
+#!/bin/sh
+
+diskman="/Applications/VMware Fusion.app/Contents/Library/vmware-vdiskmanager"
+ovftool="/Applications/VMware OVF Tool/ovftool"
+
+version=$1
+vmdir="${2:-$HOME/Documents/Virtual Machines.localized/MetricInsights-Centos-64-bit/}"
+upload_host=${3:-root@www.metricinsights.com}
+upload_dir=${4:-/var/www/www.metricinsights.com/download}
+
+outdir="$HOME/VM-Releases"
+
+[ -z "$version" ] && echo "usage: $0 <version> [vmdir] [upload_host] [upload_dir]" && exit 1
+[ ! -d "$vmdir" ] && echo "vmdir $vmdir does not exist" && exit 1
+[ ! -d "$outdir" ] && mkdir -p "$outdir"
+
+zipname="MetricInsights-${version}_CentOS-x86-64.zip"
+ovaname="MetricInsights-${version}_CentOS-x86-64.ova"
+
+cd "$(dirname "$vmdir")"
+if [ ! -f "$outdir/$zipname" ]; then
+    echo "Shrinking Virtual Disk..."
+
+    du -hs "$vmdir"
+    cd "$vmdir"
+    time "$diskman" -k *.vmdk
+    du -hs "$vmdir"
+
+##    echo "Compressing Virtual Machine...."
+##
+##    cd "$(dirname "$vmdir")"
+##    time 7z a $outdir/$zipname $(basename "$vmdir")
+fi
+
+if [ ! -f "$outdir/$ovaname" ]; then
+    echo "Creating OVA..."
+    cd "$vmdir"
+    vmx=$(ls *.vmx)
+    echo "\"$ovftool\" \"$vmx\" \"$outdir/$ovaname\""
+    time "$ovftool" --compress=9 "$vmx" "$outdir/$ovaname"
+fi
+
+#for target in $zipname $ovaname; do
+for target in $ovaname; do
+    if [ ! -f "$outdir/$target.sha1.txt" ]; then
+        sha=$(cd $outdir; shasum $target)
+        echo "$sha" | tee $outdir/$target.sha1.txt
+    else
+        sha=$(cat $outdir/$target.sha1.txt)
+        echo "$sha"
+    fi
+
+    testsha=$(ssh $upload_host cat $upload_dir/$target.sha1.txt 2>/dev/null)
+    if [ "$testsha" != "$sha" ]; then
+        echo "Uploading $target to $upload_host .... "
+        dd if="$outdir/$target" | pv -pt -s $(stat "$outdir/$target" | cut -f8 -d' ') | ssh $upload_host dd of=$upload_dir/$target
+        testsha=$(ssh $upload_host "cd $upload_dir && shasum $target | tee $upload_dir/$target.sha1.txt")
+    fi
+    echo "$testsha"
+
+    if [ "$sha" != "$testsha" ]; then
+        echo "ERROR UPLOADING $target to $upload_host CHECKSUM DIFFERENT"; 
+        echo "reupload with : $0 $version"
+    fi
+done
+

@@ -61,6 +61,13 @@ Host eve.metricinsights.com
     User cru 
     IdentityFile ~/.ssh/ec2.key
     
+Host bob bob.metricinsights.com tunnel
+    HostName bob.metricinsights.com
+    User cru
+    LocalForward 1080 localhost:1080
+    #ServerAliveInterval 5
+    #ServerAliveCountMax 3
+
 Host *.metricinsights.com
     User root
     IdentityFile ~/.ssh/ec2.key
@@ -77,12 +84,6 @@ Host *spider.io
     User root
     IdentityFile ~/.ssh/ec2.key
 
-Host bob bob.metricinsights.com tunnel
-    HostName bob.metricinsights.com
-    User cru
-    LocalForward 1080 localhost:1080
-    #ServerAliveInterval 5
-    #ServerAliveCountMax 3
 
 Host b??insight0? b??insightana0?
     User root
