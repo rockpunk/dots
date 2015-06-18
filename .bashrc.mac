@@ -2,17 +2,13 @@
 if [ -e ~/.bash_path ]; then
     . ~/.bash_path
     for d in $path; do 
-        if [ -d $d -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
+        if [ -d "$d" -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
             PATH=$d:$PATH
         fi
     done
     export PATH
 fi
 
-# set up some generic CVS stuff
-#CVSROOT=cvs:/cvs
-CVS_RSH=ssh
-export CVSROOT CVS_RSH
 
 # load system wide defs
 if [ -f /etc/bashrc ]; then
@@ -21,12 +17,16 @@ fi
 
 # set my editor
 export EDITOR=vim
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM="auto git"
 
-# give me a cool prompt
-PS1="\[[00;32m\]\u\[[00;39m\]@\[[00;32m\]\h\[[00;39m\]:\[[00;34m\]\W\[[00;39m\] \$ "
-export PS1 
 
 [ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
+
+# give me a cool prompt
+PS1='\[[00;32m\]\u\[[00;39m\]@\[[00;32m\]\h\[[00;39m\]:\[[00;34m\]\W\[[00;39m\] $(__git_ps1 "(%s)")\$ '
+export PS1 
 
 export GPG_TTY=`tty`
 
