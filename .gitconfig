@@ -10,6 +10,7 @@
 	path = remote -v
 	down = pull --rebase
 	onup = push
+	tags = tag -l
 [color]
 	ui = true
 [mergetool "diffconflicts"]
