@@ -40,27 +40,29 @@ if [ ! -f "$outdir/$ovaname" ]; then
     time "$ovftool" --compress=9 "$vmx" "$outdir/$ovaname"
 fi
 
+s3cmd put "$outdir/$ovaname" s3://metricinsights-vms/
+
 #for target in $zipname $ovaname; do
-for target in $ovaname; do
-    if [ ! -f "$outdir/$target.sha1.txt" ]; then
-        sha=$(cd $outdir; shasum $target)
-        echo "$sha" | tee $outdir/$target.sha1.txt
-    else
-        sha=$(cat $outdir/$target.sha1.txt)
-        echo "$sha"
-    fi
-
-    testsha=$(ssh $upload_host cat $upload_dir/$target.sha1.txt 2>/dev/null)
-    if [ "$testsha" != "$sha" ]; then
-        echo "Uploading $target to $upload_host .... "
-        dd if="$outdir/$target" | pv -pt -s $(stat "$outdir/$target" | cut -f8 -d' ') | ssh $upload_host dd of=$upload_dir/$target
-        testsha=$(ssh $upload_host "cd $upload_dir && shasum $target | tee $upload_dir/$target.sha1.txt")
-    fi
-    echo "$testsha"
-
-    if [ "$sha" != "$testsha" ]; then
-        echo "ERROR UPLOADING $target to $upload_host CHECKSUM DIFFERENT"; 
-        echo "reupload with : $0 $version"
-    fi
-done
-
+##for target in $ovaname; do
+##    if [ ! -f "$outdir/$target.sha1.txt" ]; then
+##        sha=$(cd $outdir; shasum $target)
+##        echo "$sha" | tee $outdir/$target.sha1.txt
+##    else
+##        sha=$(cat $outdir/$target.sha1.txt)
+##        echo "$sha"
+##    fi
+##
+##    testsha=$(ssh $upload_host cat $upload_dir/$target.sha1.txt 2>/dev/null)
+##    if [ "$testsha" != "$sha" ]; then
+##        echo "Uploading $target to $upload_host .... "
+##        dd if="$outdir/$target" | pv -pt -s $(stat "$outdir/$target" | cut -f8 -d' ') | ssh $upload_host dd of=$upload_dir/$target
+##        testsha=$(ssh $upload_host "cd $upload_dir && shasum $target | tee $upload_dir/$target.sha1.txt")
+##    fi
+##    echo "$testsha"
+##
+##    if [ "$sha" != "$testsha" ]; then
+##        echo "ERROR UPLOADING $target to $upload_host CHECKSUM DIFFERENT"; 
+##        echo "reupload with : $0 $version"
+##    fi
+##done
+##

@@ -91,6 +91,7 @@ Host b??insight0? b??insightana0?
     LocalForward 80 localhost:80
 
 Host proxmox.metricinisghts.com
+    PubKeyAuthentication no
     User root
 
 #Host *.metricinsights.com
