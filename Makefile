@@ -6,6 +6,7 @@ dirs:= bin
 normalfiles:= $(shell git ls-files | grep -v 'Makefile\|README\|bashrc\|bash_path\|ssh_config\|dircolors\|/')
 
 install:
+	@mkdir -p ~/.ssh && chmod 700 ~/.ssh
 	@for x in $(normalfiles); do\
 		ln -sf "$(pwd)/$$x" ~;\
 	done
