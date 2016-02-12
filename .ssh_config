@@ -70,7 +70,6 @@ Host bob bob.metricinsights.com tunnel
 
 Host *.metricinsights.com
     User root
-    IdentityFile ~/.ssh/ec2.key
     StrictHostKeyChecking no
 
 Host *amazonaws.com

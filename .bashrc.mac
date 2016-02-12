@@ -9,20 +9,16 @@ if [ -e ~/.bash_path ]; then
     export PATH
 fi
 
-
-# load system wide defs
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
-
 # set my editor
 export EDITOR=vim
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto git"
 
-
-[ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
+# load system wide defs
+for f in /etc/bashrc ~/dots/git_prompt.sh /opt/local/etc/bash_completion ~/.bash_alises; do 
+    [ -f $f ] && . $f
+done
 
 # give me a cool prompt
 PS1='\[[00;32m\]\u\[[00;39m\]@\[[00;32m\]\h\[[00;39m\]:\[[00;34m\]\W\[[00;39m\] $(__git_ps1 "(%s)")\$ '
@@ -44,23 +40,21 @@ function desolarize() {
     :
 }
 
-agent_running=$(ps -u $USER | grep gpg-agent | grep -v grep)
+if [ ! -z $(which gpg-agent) ]; then
+    agent_running=$(ps -u $USER | grep gpg-agent | grep -v grep)
 
-if [ -z "$agent_running" ]; then
-    eval $(gpg-agent --daemon --write-env-file=$HOME/.gpg_agent_info)
-    # figure out how this plays with current ssh-agent
-    #export SSH_AUTH_SOCK
-else
-    . $HOME/.gpg_agent_info
-fi
-export GPG_AGENT_INFO
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+    if [ -z "$agent_running" ]; then
+        eval $(gpg-agent --daemon --write-env-file=$HOME/.gpg_agent_info)
+    else
+        . $HOME/.gpg_agent_info
+    fi
+    export GPG_AGENT_INFO
 fi
 
 #PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-eval "$(rbenv init -)"
+if [ ! -z "$(which rbenv)" ]; then
+    eval "$(rbenv init -)"
+fi

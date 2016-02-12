@@ -13,11 +13,8 @@ let s:plugins = [
     \'vcscommand',
     \'git-vim',
     \'github:altercation/vim-colors-solarized',
-    \'snipmate',
-    \'snipmate-snippets',
     \'The_NERD_tree',
     \'The_NERD_Commenter',
-    \'SuperTab%1643',
     \'Command-T',
     \'fugitive',
     \'github:kien/rainbow_parentheses.vim',
@@ -36,6 +33,9 @@ let s:plugins = [
     \'github:guns/vim-clojure-highlight'
     \]
 "    \'github:Valloric/YouCompleteMe',
+"    \'snipmate',
+"    \'snipmate-snippets',
+"    \'SuperTab%1643',
 let s:plugin_autoinstall = 1
 
 " load vam
