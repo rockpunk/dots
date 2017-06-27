@@ -56,7 +56,7 @@ alias light='export SOLARIZED=light; solarize; echo -e "\033]1337;SetProfile=Sol
 alias dark='export SOLARIZED=dark; solarize; echo -e "\033]1337;SetProfile=Solarized Dark\a"'
 
 function growl() {
-   echo -e "\033]9;${1}\a"
+   echo -e "\033]9;${@}\a"
 }
 
 alias tt='tmux attach || tmux -f ~/.tmux.bob.conf new'
