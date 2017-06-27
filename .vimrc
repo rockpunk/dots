@@ -11,7 +11,6 @@ let s:plugins = [
     \'gnupg%3645',
     \'NERD_tree_Project',
     \'vcscommand',
-    \'git-vim',
     \'github:altercation/vim-colors-solarized',
     \'The_NERD_tree',
     \'The_NERD_Commenter',
@@ -30,9 +29,11 @@ let s:plugins = [
     \'github:godlygeek/tabular',
     \'github:plasticboy/vim-markdown',
     \'github:guns/vim-clojure-static',
-    \'github:guns/vim-clojure-highlight'
+    \'github:guns/vim-clojure-highlight',
+    \'github:fatih/vim-go'
     \]
 "    \'github:Valloric/YouCompleteMe',
+"    \'git-vim',
 "    \'snipmate',
 "    \'snipmate-snippets',
 "    \'SuperTab%1643',
@@ -143,12 +144,18 @@ endif
 let g:syntastic_check_on_open = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_auto_jump = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:go_list_type = 'quickfix'
 
 " the syntax checker for java depends on classpath and was buggy
 let g:syntastic_mode_map = { 'mode':"active",
     \'active_filetypes' : [],
-    \'passive_filetypes' : ['java','ruby','erb'] }
+    \'passive_filetypes' : ["java","ruby","erb","go"] }
 
+let g:go_fmt_fail_silently = 0
 
 " highlight SpellBad groups brightly
 highlight SpellBad cterm=underline,bold ctermfg=black ctermbg=DarkRed
@@ -286,6 +293,11 @@ nnoremap <leader>mg <Plug>MakeGreen
 " move vcs macros to <leader>v instead of <leader>c
 let g:VCSCommandMapPrefix = '<leader>v'
 
+" go-git
+nnoremap <leader>gb :GoBuild<cr>
+nnoremap <leader>gr :GoRun<cr>
+nnoremap <leader>gt :GoTest<cr>
+
 " snippets stuff
 let g:snips_author = 'stephen layland <steve@68k.org>'
 
@@ -335,3 +347,6 @@ endf
 
 nnoremap <leader>ss :call ToggleSolarized()<cr>
 
+if !empty(glob("~/.config/nvim/nvim-init.vim") && has('nvim') )
+    source ~/.config/nvim/nvim-init.vim
+endif

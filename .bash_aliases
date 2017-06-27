@@ -40,13 +40,11 @@ alias prd='hg up -r default'
 
 # git
 alias g='git status'
-alias gf='git fetch'
 alias gc='git commit -a'
 alias gd='git diff'
 alias ga='git add .'
 alias gp='git push'
 alias gu='git pull'
-alias go='git checkout'
 alias gt='git tip'
 alias gtp='git tip -p'
 alias gb='git branch'
@@ -54,8 +52,12 @@ alias gba='git branch -a'
 alias bfg='java -jar ~/lib/java/bfg.jar'
 
 
-alias light='export SOLARIZED=light; solarize; echo -e "\033]50;SetProfile=SolarizedLight\a"'
-alias dark='export SOLARIZED=dark; solarize; echo -e "\033]50;SetProfile=SolarizedDark\a"'
+alias light='export SOLARIZED=light; solarize; echo -e "\033]1337;SetProfile=Solarized Light\a"'
+alias dark='export SOLARIZED=dark; solarize; echo -e "\033]1337;SetProfile=Solarized Dark\a"'
+
+function growl() {
+   echo -e "\033]9;${1}\a"
+}
 
 alias tt='tmux attach || tmux -f ~/.tmux.bob.conf new'
 alias wl='wemux l'
@@ -80,4 +82,7 @@ greessh() {
     ssh $(greename $1 | tail -n1)
 }
 
+if [ ! -z "$(type -f nvim)" ]; then
+    alias vim='nvim'
+fi
 

@@ -16,10 +16,6 @@ Host document.metricinsights.com
     User root
     IdentityFile ~/.ssh/ec2.key
 
-Host ec2*amazonaws.com
-    User root
-    IdentityFile ~/.ssh/ec2.key
-
 Host cdhx chdx.metricinsights.com
     User root
     IdentityFile ~/.ssh/ec2.key
@@ -108,3 +104,7 @@ Host *.lindenlab.com
 Host adobeprd
     HostName sj1slm1002.corp.adobe.com
     User met11366
+
+Host mi-devx*
+    HostName mi-devx.dnsalias.com
+    User root

@@ -1,8 +1,9 @@
 # .bashrc
+export GOPATH=~/src/go
 if [ -e ~/.bash_path ]; then
     . ~/.bash_path
     for d in $path; do 
-        if [ -d "$d" -a -z "$(echo $PATH | grep "$d" 2>/dev/null)" ]; then
+        if [ -d "$d" -a -z "$(echo $PATH | grep $d)" ]; then
             PATH=$d:$PATH
         fi
     done
@@ -16,7 +17,7 @@ export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto git"
 
 # load system wide defs
-for f in /etc/bashrc ~/dots/git_prompt.sh /opt/local/etc/bash_completion ~/.bash_alises; do 
+for f in /etc/bashrc /opt/local/etc/bash_completion ~/dots/git-prompt.sh ~/.bash_aliases; do 
     [ -f $f ] && . $f
 done
 
@@ -58,3 +59,6 @@ fi
 if [ ! -z "$(which rbenv)" ]; then
     eval "$(rbenv init -)"
 fi
+
+# added by travis gem
+[ -f /Users/cru/.travis/travis.sh ] && source /Users/cru/.travis/travis.sh
