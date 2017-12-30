@@ -4,17 +4,9 @@ Host 68k*
     User steve
     HostName 68k.org
 
-Host crutest*
-    IdentityFile ~/.ssh/crutest_rsa
-    User root
-
 Host *treasure-data.com
     user root
     IdentityFile ~/.ssh/gree.pem
-
-Host document.metricinsights.com
-    User root
-    IdentityFile ~/.ssh/ec2.key
 
 Host cdhx chdx.metricinsights.com
     User root
@@ -22,14 +14,6 @@ Host cdhx chdx.metricinsights.com
     HostName cdhx.metricinsights.com
     LocalForward 50030 localhost:50030
     LocalForward 50060 localhost:50060
-
-Host homeaway
-    HostName ascmidb002
-    User mmoscovici
-
-Host homeaway-prod
-    HostName ascmidb004
-    User mmoscovici
 
 Host rockpunk
     User steve
@@ -42,11 +26,6 @@ Host kuru
 Host github.com
     User git
     ForwardAgent no
-    IdentityFile ~/.ssh/mi_deploy
-
-Host adam adam.metricinsights.com
-    HostName adam.metricinsights.com
-    LocalForward 1081 localhost:1080
 
 Host *
     ForwardX11 no
@@ -65,7 +44,6 @@ Host bob bob.metricinsights.com tunnel
     #ServerAliveCountMax 3
 
 Host *.metricinsights.com
-    User root
     StrictHostKeyChecking no
 
 Host *amazonaws.com
@@ -73,12 +51,6 @@ Host *amazonaws.com
 
 Host *treasure-data.com
     StrictHostKeyChecking no
-
-Host *spider.io
-    Hostname mi.spider.io
-    User root
-    IdentityFile ~/.ssh/ec2.key
-
 
 Host b??insight0? b??insightana0?
     User root
@@ -89,21 +61,12 @@ Host proxmox.metricinisghts.com
     PubKeyAuthentication no
     User root
 
-#Host *.metricinsights.com
-#    User root
-#    IdentityFile ~/.ssh/ec2.key
-
 Host backdoor backdoor.lindenlab.com 
     HostName backdoor.lindenlab.com
     User slaylandmetricinsights
 
 Host *.lindenlab.com
     User slaylandmetricinsights
-
-
-Host adobeprd
-    HostName sj1slm1002.corp.adobe.com
-    User met11366
 
 Host mi-devx*
     HostName mi-devx.dnsalias.com

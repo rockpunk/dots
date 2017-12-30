@@ -2,7 +2,7 @@ dir := $(dir $(lastword $(MAKEFILE_LIST)))
 pwd := $(shell cd $(dir); pwd)
 platform := $(shell uname)
 specialfiles:= .bashrc .bash_path
-dirs:= bin
+dirs:= bin .bashrc.d
 normalfiles:= $(shell git ls-files | grep -v 'Makefile\|README\|bashrc\|bash_path\|ssh_config\|dircolors\|/')
 
 install:
@@ -16,6 +16,8 @@ install:
 		fi;\
 	done
 	@ln -sf "$(pwd)/.ssh_config" ~/.ssh/config
+	@mkdir -p ~/.config/nvim
+	@ln -sf ~/.vimrc ~/.config/nvim/init.vim
 ifeq ($(platform),Darwin)
 	@for x in $(specialfiles); do\
 		ln -sf "$(pwd)/$$x.mac" ~/$$x;\

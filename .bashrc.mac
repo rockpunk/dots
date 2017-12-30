@@ -17,7 +17,7 @@ export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto git"
 
 # load system wide defs
-for f in /etc/bashrc /opt/local/etc/bash_completion ~/dots/git-prompt.sh ~/.bash_aliases; do 
+for f in /etc/bashrc /{opt,usr}/local/etc/bash_completion ~/.bashrc.d/*.conf; do 
     [ -f $f ] && . $f
 done
 
@@ -47,7 +47,7 @@ if [ ! -z $(which gpg-agent) ]; then
     if [ -z "$agent_running" ]; then
         eval $(gpg-agent --daemon --write-env-file=$HOME/.gpg_agent_info)
     else
-        . $HOME/.gpg_agent_info
+        [ -f $HOME/.gpg_agent_info ] && . $HOME/.gpg_agent_info
     fi
     export GPG_AGENT_INFO
 fi
@@ -55,10 +55,6 @@ fi
 #PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 #[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-if [ ! -z "$(which rbenv)" ]; then
-    eval "$(rbenv init -)"
-fi
 
 # added by travis gem
 [ -f /Users/cru/.travis/travis.sh ] && source /Users/cru/.travis/travis.sh

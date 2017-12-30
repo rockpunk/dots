@@ -4,5 +4,5 @@ dir=$HOME/dots
 if [ -d $dir ]; then
     cd $dir
     git pull
-    eval $(make)
+    eval $(make DOTDIR=$dir)
 fi
