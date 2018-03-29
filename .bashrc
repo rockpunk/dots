@@ -173,8 +173,11 @@ if [ ! -z "$(type -p ack-grep)" ]; then
     alias ack='ack-grep'
 fi
 
-eval "$(rbenv init -)"
 export PERL5LIB=/home/cru/lib/perl/lib/perl/5.10/auto:/home/cru/lib/perl/lib/perl/5.10.1/auto:/home/cru/lib/perl/share/perl/5.10.1:/home/cru/lib/perl/share/perl/5.10:$PERL5LIB
 
 export EC2_HOME=/usr/local/bin/ec2-api-tools
 export JAVA_HOME=/usr
+
+for x in ~/.bashrc.d/*.conf; do
+   . $x;
+done
