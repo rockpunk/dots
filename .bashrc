@@ -63,7 +63,7 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-export DEFAULT_SOLARIZED='light'
+export DEFAULT_SOLARIZED='dark'
 
 function solarize() { 
     [ -z "$SOLARIZED" ] && export SOLARIZED=$DEFAULT_SOLARIZED
@@ -179,4 +179,9 @@ export PERL5LIB=/home/cru/lib/perl/lib/perl/5.10/auto:/home/cru/lib/perl/lib/per
 export EC2_HOME=/usr/local/bin/ec2-api-tools
 export JAVA_HOME=/usr
 
+for x in ~/.bashrc.d/*.conf; do
+    source $x;
+done
+
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+

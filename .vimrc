@@ -24,8 +24,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mileszs/ack.vim'
 if executable('ag')
-    let g:ackprg = 'ag --vimgrep'
-    cnoreabbrev ag Ack
+    let g:ackprg = 'ag'
 endif
 
 Plug 'scrooloose/nerdcommenter'
@@ -146,6 +145,14 @@ highlight SpellBad cterm=underline,bold ctermfg=black ctermbg=DarkRed
 let g:airline_powerline_fonts = 1
 let g:airline_detect_crypt = 1
 let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_splits = 0
+"let g:airline#extensions#tabline#alt_sep = 1
+let g:airline#extensions#tabline#show_tabs=1
+let g:airline#extensions#tabline#tab_nr_type = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+
+
 
 " crazy statusline from scrooloose
 """statusline setup
@@ -215,6 +222,8 @@ nnoremap <D-k> <C-B>
 nnoremap <D-h> B
 nnoremap <D-l> E
 
+"nnoremap <C-Left> :tabprevious<CR>
+"nnoremap <C-Right> :tabnext<CR>
 
 " use visual lines, not real lines
 nnoremap j gj
