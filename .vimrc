@@ -217,13 +217,15 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-nnoremap <D-j> <C-F>
-nnoremap <D-k> <C-B>
-nnoremap <D-h> B
-nnoremap <D-l> E
+"these don't currently work
+"nnoremap <D-j> <C-F>
+"nnoremap <D-k> <C-B>
+"nnoremap <D-h> B
+"nnoremap <D-l> E
 
-"nnoremap <C-Left> :tabprevious<CR>
-"nnoremap <C-Right> :tabnext<CR>
+nnoremap H :tabprevious<CR>
+nnoremap L :tabnext<CR>
+nnoremap <leader>bt :tab ball<CR>
 
 " use visual lines, not real lines
 nnoremap j gj
@@ -234,14 +236,14 @@ nnoremap v V
 nnoremap V v
 
 " disable arrow keys
-noremap <up> <nop>
+nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
-"inoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
 
 
 " make Y like D
@@ -252,8 +254,8 @@ nnoremap / /\v
 vnoremap / /\v
 
 " don't know about these yet
-"nnoremap <tab> %
-"vnoremap <tab> %
+nnoremap <tab> %
+vnoremap <tab> %
 
 "pastetoggle
 set pastetoggle=<C-v>
