@@ -86,7 +86,7 @@ if [ "$TERM" != "dumb" ]; then
     #alias dir='ls --color=auto --format=vertical'
     #alias vdir='ls --color=auto --format=long'
     
-    if [ -e $HOME/.dir_colors ]; then
+    if [ -L $HOME/.dir_colors ]; then
         solarize
     else
         desolarize
