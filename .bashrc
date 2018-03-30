@@ -178,3 +178,5 @@ export PERL5LIB=/home/cru/lib/perl/lib/perl/5.10/auto:/home/cru/lib/perl/lib/per
 
 export EC2_HOME=/usr/local/bin/ec2-api-tools
 export JAVA_HOME=/usr
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

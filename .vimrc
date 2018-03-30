@@ -12,6 +12,7 @@ if empty(glob(g:plug_vim_path))
 endif
 
 let g:python_host_prog=expand("~/.pyenv/versions/3.5.0/bin/python")
+let g:python3_host_prog="/usr/bin/python3"
 call plug#begin('~/.vim/plugs')
 
 Plug 'inkarkat/vcscommand.vim'
@@ -53,9 +54,6 @@ else
     Plug 'junegunn/fzf', {'dir':'~/.fzf', 'do':'./install --all'}
 endif
 Plug 'junegunn/fzf.vim'
-nnoremap <leader>f :FZF<cr>
-"nnoremap <leader>u :FzfTags<cr>
-nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
 
 Plug 'fatih/vim-go', {'for':'go'}
 
@@ -251,6 +249,9 @@ vnoremap / /\v
 "pastetoggle
 set pastetoggle=<C-v>
 
+nnoremap <leader>f :FZF<cr>
+"nnoremap <leader>u :FzfTags<cr>
+nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
 " macros
 " ------
 
