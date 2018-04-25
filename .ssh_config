@@ -31,6 +31,8 @@ Host *
     ForwardX11 no
     ForwardAgent yes
     ProxyCommand none
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
 
 Host eve.metricinsights.com
     User cru 

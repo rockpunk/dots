@@ -261,8 +261,11 @@ vnoremap <tab> %
 set pastetoggle=<C-v>
 
 nnoremap <leader>f :FZF<cr>
+nmap <leader>cl :Commits<cr>
+nmap <leader>cs :GFiles?<cr>
+nmap <leader>cd :NERDTreeToggle<cr>
 "nnoremap <leader>u :FzfTags<cr>
-nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
+"nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
 " macros
 " ------
 
