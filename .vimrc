@@ -31,11 +31,12 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'hashivim/vim-terraform'
 
 Plug 'jamessan/vim-gnupg'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'Shougo/deoplete.nvim'
+"Plug 'Shougo/deoplete.nvim'
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#omni#functions = {}
 let g:deoplete#omni#functions.go = 'go#complete#Complete'
@@ -44,7 +45,7 @@ if !has('nvim')
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-Plug 'jalvesaq/nvim-r', {'for':'r'}
+"Plug 'jalvesaq/nvim-r', {'for':'r'}
 Plug 'derekwyatt/vim-scala', {'for':'scala'}
 
 if isdirectory('/usr/local/opt/fzf')
@@ -260,7 +261,7 @@ vnoremap <tab> %
 "pastetoggle
 set pastetoggle=<C-v>
 
-nnoremap <leader>f :FZF<cr>
+nnoremap <leader>f :Files ~/src/analytics<cr>
 nmap <leader>cl :Commits<cr>
 nmap <leader>cs :GFiles?<cr>
 nmap <leader>cd :NERDTreeToggle<cr>
@@ -364,3 +365,6 @@ nnoremap <leader>ss :call ToggleSolarized()<cr>
 if !empty(glob("~/.config/nvim/nvim-init.vim") && has('nvim') )
     source ~/.config/nvim/nvim-init.vim
 endif
+call remote#host#RegisterPlugin('python3', '/Users/shougo/.vim/bundle/deoplete.nvim/rplugin/python3/deoplete.py', [
+      \ {'sync': 1, 'name': 'DeopleteInitializePython', 'type': 'command', 'opts': {}},
+\ ])

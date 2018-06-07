@@ -6,5 +6,6 @@ path="$HOME/bin \
     $HOME/.rbenv/bin \
     /opt/local/lib/mysql51/bin \
     /usr/local/go/bin \
+    /usr/local/etc/bash_completion.d \
     /opt/local/lib/mariadb/bin \
     $GOPATH/bin"

@@ -20,3 +20,6 @@
 	keepBackup = false
 [push]
 	default = matching
+[rerere]
+	enabled = true
+	autoupdate = true
