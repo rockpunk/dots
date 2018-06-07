@@ -12,7 +12,10 @@ if empty(glob(g:plug_vim_path))
 endif
 
 let g:python_host_prog=expand("~/.pyenv/versions/3.5.0/bin/python")
-let g:python3_host_prog="/usr/bin/python3"
+let g:python_host_proc="/opt/nuna/common/bin/python"
+let g:python3_host_prog="/opt/nuna/common/bin/python3"
+let g:R_in_buffer=0
+let g:ale_use_global_executables=1
 call plug#begin('~/.vim/plugs')
 
 Plug 'inkarkat/vcscommand.vim'
@@ -44,6 +47,7 @@ if !has('nvim')
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
+Plug 'hashivim/vim-terraform'
 Plug 'jalvesaq/nvim-r', {'for':'r'}
 Plug 'derekwyatt/vim-scala', {'for':'scala'}
 
@@ -260,7 +264,7 @@ vnoremap <tab> %
 "pastetoggle
 set pastetoggle=<C-v>
 
-nnoremap <leader>f :FZF<cr>
+nnoremap <leader>f :Files ~/src/analytics<cr>
 nmap <leader>cl :Commits<cr>
 nmap <leader>cs :GFiles?<cr>
 nmap <leader>cd :NERDTreeToggle<cr>
