@@ -1,76 +1,67 @@
-"set nocompatible | filetype indent plugin on | syn on
+set nocompatible | filetype indent plugin on | syn on
 
-let s:plugins = []
+if has('nvim')
+    let g:plug_vim_path = '~/.local/share/nvim/site/autoload/plug.vim'
+else
+    let g:plug_vim_path = '~/.vim/autoload/plug.vim'
+endif
 
-call add(s:plugins, {'names':[
-    \'vcscommand',
-    \'Syntastic',
-    \'fugitive',
-    \'github:kien/rainbow_parentheses.vim',
-    \'github:godlygeek/tabular',
-    \'github:altercation/vim-colors-solarized',
-    \], 'tag':'autoload'})
+if empty(glob(g:plug_vim_path))
+  silent exe '!curl -fLo ' . g:plug_vim_path . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source ~/.vimrc
+endif
 
-"call add(s:plugins, {'names':[
-"    \], 'tag':'autoload'})
+let g:python_host_prog=expand("~/.pyenv/versions/3.5.0/bin/python")
+let g:python_host_proc="/opt/nuna/common/bin/python"
+let g:python3_host_prog="/opt/nuna/common/bin/python3"
+let g:R_in_buffer=0
+let g:ale_use_global_executables=1
+call plug#begin('~/.vim/plugs')
 
-call add(s:plugins, {'names':[
-    \'ack',
-    \'NERD_tree_Project',
-    \'The_NERD_tree',
-    \'The_NERD_Commenter'
-    \], 'tag':'shell'})
+Plug 'inkarkat/vcscommand.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'godlygeek/tabular'
+Plug 'altercation/vim-colors-solarized'
 
-call add(s:plugins, {'names':[
-    \'repeat',
-    \'speeddating',
-    \'surround'
-    \], 'tag':'useful'})
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'mileszs/ack.vim'
+if executable('ag')
+    let g:ackprg = 'ag'
+endif
 
-call add(s:plugins, {'name':'github:jamessan/vim-gnupg'})
-call add(s:plugins, {'name':'github:derekwyatt/vim-scala','filename_regex':'\.sc(ala)?$'})
-call add(s:plugins, {'name':'github:platicboy/vim-markdown','filename_regex':'\.md$'})
-call add(s:plugins, {'names':['github:guns/vim-clojure-static','github:guns/vim-clojure-highlight'],'filename_regex':'.clj$'})
-call add(s:plugins, {'names':['rails','vim-ruby'],'filename_regex':'\.rb$'})
-call add(s:plugins, {'name':'github:fatih/vim-go','filename_regex':'\.go$'})
-call add(s:plugins, {'name':'Nvim-R','filename_regex':'\.R$'})
-"call add(s:plugins, {'name':'github:vim-scripts/taglist.vim'})
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
 
-"    \'github:Valloric/YouCompleteMe',
-"    \'snipmate',
-"    \'snipmate-snippets',
-"    \'SuperTab%1643',
-"    \'Command-T',
-"    \'Vim-R-plugin',
+Plug 'jamessan/vim-gnupg'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'Shougo/deoplete.nvim'
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#omni#functions = {}
+let g:deoplete#omni#functions.go = 'go#complete#Complete'
+if !has('nvim')
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
+Plug 'hashivim/vim-terraform'
+Plug 'jalvesaq/nvim-r', {'for':'r'}
+Plug 'derekwyatt/vim-scala', {'for':'scala'}
 
-fun! SetupVAM()
-  let c = get(g:, 'vim_addon_manager', {})
-  let g:vim_addon_manager = c
-  let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
+if isdirectory('/usr/local/opt/fzf')
+    Plug '/usr/local/opt/fzf'
+else
+    Plug 'junegunn/fzf', {'dir':'~/.fzf', 'do':'./install --all'}
+endif
+Plug 'junegunn/fzf.vim'
 
-  " Force your ~/.vim/after directory to be last in &rtp always:
-  " let g:vim_addon_manager.rtp_list_hook = 'vam#ForceUsersAfterDirectoriesToBeLast'
+Plug 'fatih/vim-go', {'for':'go'}
 
-  " most used options you may want to use:
-  
-  " auto-install if plugin doesn't exist without asking
-  let c.auto_install = 1
-  " don't show those hit Enter to continue dialogs
-  let c.log_to_buf = 1
-
-  let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
-  if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
-    execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
-        \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
-  endif
-
-  " This provides the VAMActivate command, you could be passing plugin names, too
-  call vam#ActivateAddons([], {})
-endfun
-call SetupVAM()
-
-call vam#Scripts(s:plugins, {'tag_regex':'autoload'})
+Plug 'w0rp/ale'
+call plug#end()
 
 " basic options
 " -------------
@@ -119,6 +110,22 @@ if $SOLARIZED == 'light' || $SOLARIZED == 'dark'
     let &background=$SOLARIZED
 endif
 
+let g:ale_fixers = {
+\   'python':['yapf'],
+\   'javascript': ['eslint'],
+\   'java':['google-java-format'],
+\}
+"
+"let g:ale_lint_on_text_changed=0
+"let g:ale_lint_on_enter=1
+"let g:ale_lint_on_save=1
+nmap <silent> <C-p> <Plug>(ale_previous_wrap)
+nmap <silent> <C-n> <Plug>(ale_next_wrap)
+
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" syntastic stuff... deprecated for ALE
 let g:syntastic_check_on_open = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_auto_jump = 1
@@ -138,46 +145,59 @@ let g:go_fmt_fail_silently = 0
 " highlight SpellBad groups brightly
 highlight SpellBad cterm=underline,bold ctermfg=black ctermbg=DarkRed
 
+" airline status bar
+let g:airline_powerline_fonts = 1
+let g:airline_detect_crypt = 1
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_splits = 0
+"let g:airline#extensions#tabline#alt_sep = 1
+let g:airline#extensions#tabline#show_tabs=1
+let g:airline#extensions#tabline#tab_nr_type = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+
+
+
 " crazy statusline from scrooloose
-"statusline setup
-"set statusline =%#identifier#
-set statusline+=[%f]    "tail of the filename
-set statusline+=%*
-
-set statusline+=%h      "help file flag
-"set statusline+=%y      "filetype
-
-"read only flag
-set statusline+=%#identifier#
-set statusline+=%r
-set statusline+=%*
-
-"modified flag
-set statusline+=%#identifier#
-set statusline+=%m
-set statusline+=%*
-
-"set statusline+=%{fugitive#statusline()}
-set statusline+=%#constant#
-set statusline+=%{VCSCommandGetStatusLine()}
-set statusline+=%*
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-"display a warning if &paste is set
-set statusline+=%#error#
-set statusline+=%{&paste?'[paste]':''}
-set statusline+=%*
-
-set statusline+=%=      "left/right separator
-"set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
-set statusline+=%c,     "cursor column
-set statusline+=%l/%L   "cursor line/total lines
-set statusline+=\ %P    "percent through file
-
-set laststatus=2
+"""statusline setup
+"""set statusline =%#identifier#
+""set statusline+=[%f]    "tail of the filename
+""set statusline+=%*
+""
+""set statusline+=%h      "help file flag
+"""set statusline+=%y      "filetype
+""
+"""read only flag
+""set statusline+=%#identifier#
+""set statusline+=%r
+""set statusline+=%*
+""
+"""modified flag
+""set statusline+=%#identifier#
+""set statusline+=%m
+""set statusline+=%*
+""
+"""set statusline+=%{fugitive#statusline()}
+""set statusline+=%#constant#
+""set statusline+=%{VCSCommandGetStatusLine()}
+""set statusline+=%*
+""
+"""set statusline+=%#warningmsg#
+"""set statusline+=%{SyntasticStatuslineFlag()}
+"""set statusline+=%*
+""
+"""display a warning if &paste is set
+""set statusline+=%#error#
+""set statusline+=%{&paste?'[paste]':''}
+""set statusline+=%*
+""
+""set statusline+=%=      "left/right separator
+"""set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
+""set statusline+=%c,     "cursor column
+""set statusline+=%l/%L   "cursor line/total lines
+""set statusline+=\ %P    "percent through file
+""
+""set laststatus=2
 
 let R_path="/usr/local/bin"
 
@@ -201,11 +221,15 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-nnoremap <D-j> <C-F>
-nnoremap <D-k> <C-B>
-nnoremap <D-h> B
-nnoremap <D-l> E
+"these don't currently work
+"nnoremap <D-j> <C-F>
+"nnoremap <D-k> <C-B>
+"nnoremap <D-h> B
+"nnoremap <D-l> E
 
+nnoremap H :tabprevious<CR>
+nnoremap L :tabnext<CR>
+nnoremap <leader>bt :tab ball<CR>
 
 " use visual lines, not real lines
 nnoremap j gj
@@ -216,14 +240,14 @@ nnoremap v V
 nnoremap V v
 
 " disable arrow keys
-noremap <up> <nop>
+nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
-"inoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
 
 
 " make Y like D
@@ -234,12 +258,18 @@ nnoremap / /\v
 vnoremap / /\v
 
 " don't know about these yet
-"nnoremap <tab> %
-"vnoremap <tab> %
+nnoremap <tab> %
+vnoremap <tab> %
 
 "pastetoggle
 set pastetoggle=<C-v>
 
+nnoremap <leader>f :Files ~/src/analytics<cr>
+nmap <leader>cl :Commits<cr>
+nmap <leader>cs :GFiles?<cr>
+nmap <leader>cd :NERDTreeToggle<cr>
+"nnoremap <leader>u :FzfTags<cr>
+"nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
 " macros
 " ------
 

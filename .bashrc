@@ -63,7 +63,7 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-export DEFAULT_SOLARIZED='light'
+export DEFAULT_SOLARIZED='dark'
 
 function solarize() { 
     [ -z "$SOLARIZED" ] && export SOLARIZED=$DEFAULT_SOLARIZED
@@ -86,7 +86,7 @@ if [ "$TERM" != "dumb" ]; then
     #alias dir='ls --color=auto --format=vertical'
     #alias vdir='ls --color=auto --format=long'
     
-    if [ -e $HOME/.dir_colors ]; then
+    if [ -L $HOME/.dir_colors ]; then
         solarize
     else
         desolarize
@@ -179,5 +179,7 @@ export EC2_HOME=/usr/local/bin/ec2-api-tools
 export JAVA_HOME=/usr
 
 for x in ~/.bashrc.d/*.conf; do
-   . $x;
+    source $x;
 done
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

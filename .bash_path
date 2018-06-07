@@ -1,1 +1,5 @@
-path="$HOME/bin $HOME/.rbenv/bin $HOME/.rbenv/shims /opt/chef/embedded/bin"
+path="$HOME/bin \
+    $HOME/analytics/code/sh/airflow \
+    $HOME/.rbenv/bin \
+    $HOME/.rbenv/shims \
+    /opt/chef/embedded/bin"

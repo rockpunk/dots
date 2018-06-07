@@ -1,5 +1,5 @@
 [user]
-	name = Stephen Layland
+	name = Stephen Layland 
 	email = steve@nuna.com
 [merge]
 	tool = vimdiff
@@ -11,6 +11,7 @@
 	down = pull --rebase
 	onup = push
 	tags = tag -l
+    cob = checkout -b
 [color]
 	ui = true
 [mergetool "diffconflicts"]
