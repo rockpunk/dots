@@ -68,6 +68,7 @@ call plug#end()
 
 " ignore vi
 set nocompatible
+set more
 
 " text options
 " ------------
