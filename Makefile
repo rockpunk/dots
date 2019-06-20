@@ -1,9 +1,9 @@
 dir := $(dir $(lastword $(MAKEFILE_LIST)))
 pwd := $(shell cd $(dir); pwd)
 platform := $(shell uname)
-specialfiles:= .bashrc .bash_path
+specialfiles:= .bashrc .bash_path .bash_profile
 dirs:= bin .bashrc.d
-normalfiles:= $(shell git ls-files | grep -v 'Makefile\|README\|bashrc\|bash_path\|ssh_config\|dircolors\|/')
+normalfiles:= $(shell git ls-files | grep -v 'Makefile\|README\|bash_profile\|bashrc\|bash_path\|ssh_config\|dircolors\|/')
 
 install:
 	@mkdir -p ~/.ssh && chmod 700 ~/.ssh

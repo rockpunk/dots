@@ -7,7 +7,7 @@ if [ -z "$(type -P brew)" ]; then
 fi
 
 CASKS="iTerm2 adoptopenjdk"
-PKGS="nvim bash-completion scala"
+PKGS="nvim bash-completion scala pyenv pyenv-virtualenv"
 
 for cask in $CASKS; do 
     brew cask install $cask;
@@ -18,3 +18,6 @@ for pkg in $PKGS; do
 done
 
 $base/update-homedir.sh
+
+. ~/.bashrc
+
