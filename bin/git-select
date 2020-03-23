@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+
+# git select (branch select)
+# a git command for checking out a branch or deleting a branch via
+# a bash selection menu that uses up/down arrow keys
+#
+# usage:
+# - git select
+#
+# set up:
+# 1) copy the contents of this gist
+# 2) create a file that resides in your PATH directory(ies) and name it 'git-select'
+#    - you can see your PATH directory(ies) by running 'echo $PATH'
+# 3) paste the contents of this gist into the file you just created and save
+# 4) make the file an executable by running 'chmod +x path/to/git-select'
+#
+# this was adapted and renamed from @brybott's original implementation here:
+# 
+#    https://gist.github.com/brybott/b2752cfb5303ab4c898573327b40a45c
+# 
+# for added usability, alias gs="git select"
+#
+##################################################################
+##################################################################
+# The function select_option is used adapted from:
+# https://unix.stackexchange.com/questions/146570/arrow-key-enter-menu
+#
+# Renders a text based list of options that can be selected by the
+# user using up, down and enter keys and returns the chosen option.
+#
+#   Arguments   : list of options, maximum of 256
+#                 "opt1" "opt2" ...
+#   Return value: selected index (0 for opt1, 1 for opt2 ...)
+#   Side effect: sets $selected and $action for use later
+select_option() {
+    while true; do
+        update_status
+        # print options by overwriting the last lines
+        local idx=0
+        for opt; do
+            cursor_to $(($STARTROW + $idx))
+            if [ $idx -eq $selected ]; then
+                print_selected "$opt"
+            else
+                print_option "$opt"
+            fi
+            ((idx++))
+        done
+
+        # user key control
+        action=$(key_input)
+        case $action in
+            up)    
+                ((selected--));
+                if [ $selected -lt 0 ]; then selected=$(($# - 1)); fi;;
+            down)
+                ((selected++));
+                if [ $selected -ge $# ]; then selected=0; fi;;
+            select|delete|force_delete)
+                break ;;
+            quit) 
+                exit ;;
+        esac
+    done
+}
+
+##################################################################
+##################################################################
+
+
+
+
+branch_selector() {
+    ## helper defs
+    COLS=$(tput cols)
+    ESC=$(printf "\033")
+
+    # little helpers for terminal print control and key input
+    cursor_to()        { printf "$ESC[$1;${2:-1}H"; }
+    cursor_blink_on()  { printf "$ESC[?25h"; }
+    cursor_blink_off() { printf "$ESC[?25l"; }
+    get_cursor_row()   { IFS=';' read -sdR -p $'\E[6n' ROW COL; echo ${ROW#*[}; }
+    reprint()          { printf "\r% -$((COLS))s" "$@"; }
+    print_option()     { reprint "   $1 "; }
+    print_selected()   { reprint "  $ESC[7m $1 $ESC[27m"; }
+
+    key_input() { 
+        read -s -n1 key
+        if [ "$key" == "$ESC" ]; then
+            read -sn2 extra
+        fi
+        case "$key$extra" in
+            k|"$ESC[A") echo up;;
+            j|"$ESC[B") echo down;;
+            q|Q) echo quit;;
+            d) echo delete;;
+            D) echo force_delete;;
+            "") echo select;;
+        esac
+    }
+
+
+    # initially print empty new lines (scroll down if at bottom of screen)
+    num_branches=$#
+    if [ $# -eq 0 ]; then 
+        exit 1
+    elif [ $num_branches -eq 1 ]; then
+        echo "Only one branch to select: $1" 
+        exit 1
+    fi
+    for opt; do printf "\n"; done
+    # 1 more for status
+    printf "\n"
+
+    # determine current screen position for overwriting the options
+    local STATUSROW=`get_cursor_row`
+    local LASTROW=$(($STATUSROW - 1))
+    local STARTROW=$(($LASTROW - $num_branches))
+
+    local selected=0
+    local num_deleted=0
+    local last_err=
+    local last_err_ts=
+
+    log() {
+        last_err="$@"
+        last_err_ts=$(date +%s)
+    }
+
+    print_status() { 
+        cursor_to $STATUSROW
+        msg=$(echo $@ | head -c $((COLS)) | tr '\n' ' ')
+        reprint "$msg"
+    }
+
+    update_status() {
+        now=$(date +%s)
+        last_ts=${last_err_ts:-$((now-10))}
+        if [ $(( $now - $last_ts )) -gt 1 ]; then
+            print_status "q: quit | j/k (↑/↓): nav | d/D: delete"
+        else
+            print_status "$last_err"
+        fi
+    }
+
+    refresh() {
+        cur=`get_cursor_row`
+        cursor_to $STARTROW
+        n=0; while [ $n -lt $num_branches ]; do ((n++)); reprint ' '; printf '\n'; done
+
+        update_status
+        cursor_to $cur
+    }
+
+    # ensure cursor and input echoing back on upon a ctrl+c during read -s
+    trap "cursor_blink_on; stty echo; cursor_to $STATUSROW; printf '\n'" EXIT
+
+    cursor_blink_off
+    local selected=0
+    local action=
+    
+    while true; do 
+        refresh
+        branches=($(git branch --format='%(refname:short)'))
+
+        # select_option sets `selected` and `action`
+        select_option ${branches[@]}
+
+        branch=${branches[$selected]}
+        checked_out_branch=$(git branch --show-current)
+
+        case $action in
+            select)
+                log $(git checkout $branch 2>&1 1>/dev/null); 
+                update_status 
+                break ;;
+            delete|force_delete)
+                if [ "$branch" == "master" ]; then
+                    log 'Not deleting master branch. Sorry!'; 
+                else
+                    [ "$branch" == "$checked_out_branch" ] && git checkout master >/dev/null 2>&1
+                    flag="-d"
+                    [ $action == "force_delete" ] && flag="-D"
+                    msg=$(git branch $flag $branch 2>&1)
+                    if [ $? -eq 0 -a $selected -gt 1 ]; then
+                        cursor_to $((selected-1))
+                    fi
+                    log $msg
+                fi ;;
+            exit)
+                break ;;
+        esac
+    done
+}
+
+branch_selector $(git branch --format='%(refname:short)')

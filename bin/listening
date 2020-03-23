@@ -1,0 +1,1 @@
+lsof -iTCP -sTCP:LISTEN | cut -b 11-15 | sort | uniq | grep -v PID | xargs ps -p

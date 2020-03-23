@@ -1,6 +1,6 @@
 [user]
 	name = Stephen Layland 
-	email = steve@nuna.com
+	email = slayland@tubi.tv
 [merge]
 	tool = vimdiff
 	conflictstyle = merge

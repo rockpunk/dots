@@ -17,7 +17,7 @@ export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto git"
 
 # load system wide defs
-for f in /etc/bashrc /{opt,usr}/local/etc/bash_completion ~/.bashrc.d/*.conf; do 
+for f in /etc/bashrc ~/.bashrc.d/*.conf /usr/local/etc/profile.d/bash_completion.sh; do 
     [ -f $f ] && . $f
 done
 

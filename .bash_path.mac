@@ -1,11 +1,15 @@
 path="$HOME/bin \
+    $HOME/.poetry/bin \
     /usr/local/bin \
     /opt/local/bin \
     /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin \
     ~/android/sdk-r06/tools \
     $HOME/.rbenv/bin \
     /opt/local/lib/mysql51/bin \
+    /usr/local/opt/mysql-client/bin \
     /usr/local/go/bin \
-    /usr/local/etc/bash_completion.d \
     /opt/local/lib/mariadb/bin \
+    /usr/local/opt/libpq/bin \
+    /usr/local/Cellar/wireshark/3.0.7/bin \
+    $HOME/.gem/ruby/2.3.0/bin
     $GOPATH/bin"

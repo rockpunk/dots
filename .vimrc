@@ -27,6 +27,7 @@ if executable('ag')
     let g:ackprg = 'ag'
 endif
 
+Plug 'vim-scripts/boxdraw'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-repeat'
@@ -57,7 +58,9 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'fatih/vim-go', {'for':'go'}
 
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
+Plug 'cespare/vim-toml'
+Plug 'udalov/kotlin-vim'
 call plug#end()
 
 " basic options
@@ -107,8 +110,9 @@ if $SOLARIZED == 'light' || $SOLARIZED == 'dark'
     let &background=$SOLARIZED
 endif
 
+let g:ale_lint_on_text_changed = 'always'
 let g:ale_fixers = {
-\   'python':['yapf'],
+\   'python':['black','yapf'],
 \   'javascript': ['eslint'],
 \   'java':['google-java-format'],
 \}
@@ -261,7 +265,7 @@ vnoremap <tab> %
 "pastetoggle
 set pastetoggle=<C-v>
 
-nnoremap <leader>f :Files ~/src/analytics<cr>
+nnoremap <leader>f :FZF<cr>
 nmap <leader>cl :Commits<cr>
 nmap <leader>cs :GFiles?<cr>
 nmap <leader>cd :NERDTreeToggle<cr>
@@ -312,6 +316,9 @@ nmap <Leader>a= :Tabularize /=<CR>
 vmap <Leader>a= :Tabularize /=<CR>
 nmap <Leader>a: :Tabularize /:\zs<CR>
 vmap <Leader>a: :Tabularize /:\zs<CR>
+
+" ALE
+nmap <Leader>ff :ALEFix<CR>
 
 " snippets stuff
 let g:snips_author = 'stephen layland <steve@68k.org>'
