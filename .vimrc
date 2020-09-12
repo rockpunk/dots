@@ -12,7 +12,12 @@ if empty(glob(g:plug_vim_path))
 endif
 
 let g:python_host_prog=expand("~/.pyenv/versions/3.5.0/bin/python")
-let g:python3_host_prog="/usr/bin/python3"
+let g:python3_host_prog=expand("~/.pyenv/versions/3.7.3/envs/nvim/bin/python3.7")
+let R_path="/usr/local/bin"
+
+" ----------------------
+"       plugins
+" ----------------------
 call plug#begin('~/.vim/plugs')
 
 Plug 'inkarkat/vcscommand.vim'
@@ -21,6 +26,7 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'godlygeek/tabular'
 Plug 'altercation/vim-colors-solarized'
 
+Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mileszs/ack.vim'
 if executable('ag')
@@ -61,10 +67,19 @@ Plug 'fatih/vim-go', {'for':'go'}
 Plug 'dense-analysis/ale'
 Plug 'cespare/vim-toml'
 Plug 'udalov/kotlin-vim'
+Plug 'Glench/Vim-Jinja2-Syntax'
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
+" METAL \m/
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
-" basic options
-" -------------
+source ~/.vim/metals.vim
+
+" ---------------------
+"   basic options
+" --------------------
 
 " ignore vi
 set nocompatible
@@ -85,7 +100,7 @@ set modelines=10
 " comments
 " --------
 set comments+=",b:##"
-set formatoptions="tcnqrlo"
+set formatoptions="tcrnqlo"
 
 " display options
 " ---------------
@@ -114,7 +129,7 @@ let g:ale_lint_on_text_changed = 'always'
 let g:ale_fixers = {
 \   'python':['black','yapf'],
 \   'javascript': ['eslint'],
-\   'java':['google-java-format'],
+\   'java':['google-java-format']
 \}
 "
 "let g:ale_lint_on_text_changed=0
@@ -126,27 +141,17 @@ nmap <silent> <C-n> <Plug>(ale_next_wrap)
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" syntastic stuff... deprecated for ALE
-let g:syntastic_check_on_open = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_auto_jump = 1
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:go_list_type = 'quickfix'
-
-" the syntax checker for java depends on classpath and was buggy
-let g:syntastic_mode_map = { 'mode':"active",
-    \'active_filetypes' : [],
-    \'passive_filetypes' : ["java","ruby","erb","go"] }
-
 let g:go_fmt_fail_silently = 0
 
 " highlight SpellBad groups brightly
 highlight SpellBad cterm=underline,bold ctermfg=black ctermbg=DarkRed
 
-" airline status bar
+" ---------------- 
+"   status bar
+" ----------------
+
+" airline
 let g:airline_powerline_fonts = 1
 let g:airline_detect_crypt = 1
 let g:airline#extensions#ale#enabled = 1
@@ -157,51 +162,12 @@ let g:airline#extensions#tabline#show_tabs=1
 let g:airline#extensions#tabline#tab_nr_type = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 
+let g:airline#extensions#coc#error_symbol = 'Error:'
+let g:airline#extensions#coc#warning_symbol = 'Warning:'
+let g:airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+let g:airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 
-
-" crazy statusline from scrooloose
-"""statusline setup
-"""set statusline =%#identifier#
-""set statusline+=[%f]    "tail of the filename
-""set statusline+=%*
-""
-""set statusline+=%h      "help file flag
-"""set statusline+=%y      "filetype
-""
-"""read only flag
-""set statusline+=%#identifier#
-""set statusline+=%r
-""set statusline+=%*
-""
-"""modified flag
-""set statusline+=%#identifier#
-""set statusline+=%m
-""set statusline+=%*
-""
-"""set statusline+=%{fugitive#statusline()}
-""set statusline+=%#constant#
-""set statusline+=%{VCSCommandGetStatusLine()}
-""set statusline+=%*
-""
-"""set statusline+=%#warningmsg#
-"""set statusline+=%{SyntasticStatuslineFlag()}
-"""set statusline+=%*
-""
-"""display a warning if &paste is set
-""set statusline+=%#error#
-""set statusline+=%{&paste?'[paste]':''}
-""set statusline+=%*
-""
-""set statusline+=%=      "left/right separator
-"""set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
-""set statusline+=%c,     "cursor column
-""set statusline+=%l/%L   "cursor line/total lines
-""set statusline+=\ %P    "percent through file
-""
-""set laststatus=2
-
-let R_path="/usr/local/bin"
-
+" ---------------
 " key mappings
 " ---------------
 
@@ -266,9 +232,10 @@ vnoremap <tab> %
 set pastetoggle=<C-v>
 
 nnoremap <leader>f :FZF<cr>
-nmap <leader>cl :Commits<cr>
-nmap <leader>cs :GFiles?<cr>
+"nmap <leader>cl :Commits<cr>
+"nmap <leader>cs :GFiles?<cr>
 nmap <leader>cd :NERDTreeToggle<cr>
+nnoremap <leader>n :only<cr>
 "nnoremap <leader>u :FzfTags<cr>
 "nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<cr>
 " macros
@@ -288,7 +255,7 @@ nnoremap <leader>1 :set invnumber<cr>
 nnoremap <leader>a :Ack<space>
 
 " gq a paragraph
-nnoremap <leader>q gqip
+"nnoremap <leader>q gqip
 
 " underline with -/=/~/_
 nnoremap <leader>- yypVr-
@@ -301,7 +268,7 @@ nnoremap <leader>ev :tabe ~/.vimrc<cr>
 
 " tasklist, makegreen and command-t all map <leader>t
 nnoremap <leader>td <Plug>TaskList
-nnoremap <leader>mg <Plug>MakeGreen
+"nnoremap <leader>mg <Plug>MakeGreen
 
 " move vcs macros to <leader>v instead of <leader>c
 let g:VCSCommandMapPrefix = '<leader>v'
@@ -319,6 +286,10 @@ vmap <Leader>a: :Tabularize /:\zs<CR>
 
 " ALE
 nmap <Leader>ff :ALEFix<CR>
+
+" markdown preview
+nmap <leader>m <Plug>MarkdownPreview
+nmap <leader>mm <Plug>MarkdownPreviewToggle
 
 " snippets stuff
 let g:snips_author = 'stephen layland <steve@68k.org>'

@@ -4,24 +4,9 @@ Host 68k*
     User steve
     HostName 68k.org
 
-Host *treasure-data.com
-    user root
-    IdentityFile ~/.ssh/gree.pem
-
-Host cdhx chdx.metricinsights.com
-    User root
-    IdentityFile ~/.ssh/ec2.key
-    HostName cdhx.metricinsights.com
-    LocalForward 50030 localhost:50030
-    LocalForward 50060 localhost:50060
-
 Host rockpunk
     User steve
     Host rockpunk.org
-
-Host kuru
-    User kurufoot
-    HostName kurufootwear.com
 
 Host github.com
     User git
@@ -30,46 +15,27 @@ Host github.com
 Host *
     ForwardX11 no
     ForwardAgent yes
-    ProxyCommand none
+#    ProxyCommand none
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
+    ServerAliveInterval 20
 
-Host eve.metricinsights.com
-    User cru 
-    IdentityFile ~/.ssh/ec2.key
-    
-Host bob bob.metricinsights.com tunnel
-    HostName bob.metricinsights.com
-    User cru
-    LocalForward 1080 localhost:1080
-    #ServerAliveInterval 5
-    #ServerAliveCountMax 3
+Host bastion-staging
+    HostName jump.staging-public.tubi.io
+    User ubuntu
+    IdentityFile ~/.ssh/staging.pem
 
-Host *.metricinsights.com
-    StrictHostKeyChecking no
+Host bastion-production
+    HostName jump.production-public.tubi.io
+    User ubuntu
+    IdentityFile ~/.ssh/production.pem
 
-Host *amazonaws.com
-    StrictHostKeyChecking no
+Host 172.30.*.*
+    ProxyCommand ssh bastion-staging -W %h:%p
+    User ubuntu
+    IdentityFile ~/.ssh/staging.pem
 
-Host *treasure-data.com
-    StrictHostKeyChecking no
-
-Host b??insight0? b??insightana0?
-    User root
-    LocalForward 443 localhost:443
-    LocalForward 80 localhost:80
-
-Host proxmox.metricinisghts.com
-    PubKeyAuthentication no
-    User root
-
-Host backdoor backdoor.lindenlab.com 
-    HostName backdoor.lindenlab.com
-    User slaylandmetricinsights
-
-Host *.lindenlab.com
-    User slaylandmetricinsights
-
-Host mi-devx*
-    HostName mi-devx.dnsalias.com
-    User root
+Host 172.40.*.*
+    ProxyCommand ssh bastion-production -W %h:%p
+    User ubuntu
+    IdentityFile ~/.ssh/production.pem

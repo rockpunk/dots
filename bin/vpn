@@ -1,0 +1,6 @@
+#!/bin/sh
+
+vpn="Tubi - Cloud VPN"
+cmd=${1:-list}
+
+scutil --nc $cmd "$vpn" --secret $(security find-generic-password -D "IPSec Shared Secret" -l "$vpn" -w)
